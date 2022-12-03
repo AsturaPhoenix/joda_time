@@ -30,6 +30,9 @@ class Date extends Equatable {
 
   LocalDateTime operator &(Time time) => LocalDateTime(this, time);
 
+  /// Produces a UTC [core.DateTime] with local fields copied from [this].
+  core.DateTime toCoreFields() => core.DateTime.utc(year, month, day);
+
   Date nextWeekday(int weekday) =>
       this + Period(days: (weekday - this.weekday) % DateTime.daysPerWeek);
 }

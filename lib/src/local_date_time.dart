@@ -62,6 +62,10 @@ class LocalDateTime extends Equatable implements Date, Time {
   LocalDateTime operator &(Time time) => date & time;
 
   @override
+  core.DateTime toCoreFields() =>
+      core.DateTime.utc(year, month, day, hour, minute, second, millisecond);
+
+  @override
   LocalDateTime nextWeekday(int weekday) =>
       LocalDateTime(date.nextWeekday(weekday), time);
 }

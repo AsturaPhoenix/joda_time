@@ -32,6 +32,8 @@ class DateTime extends Instant implements LocalDateTime {
           resolver: Resolvers.forEarlierOffset);
 
   final TimeZone timeZone;
+  tz.TimeZone get timeZoneOffset =>
+      timeZone.value.timeZone(millisecondsSinceEpoch);
 
   final core.DateTime _local;
 
@@ -71,7 +73,7 @@ class DateTime extends Instant implements LocalDateTime {
   @override
   int get millisecond => _local.millisecond;
 
-  bool get isDst => timeZone.value.timeZone(millisecondsSinceEpoch).isDst;
+  bool get isDst => timeZoneOffset.isDst;
 
   /// Variation of [operator +] that accepts resolver overrides. As the operator
   /// defaults to [Resolvers.forEarlierOffset], that is the default here as
@@ -123,6 +125,9 @@ class DateTime extends Instant implements LocalDateTime {
   ///
   /// https://www.joda.org/joda-time/apidocs/org/joda/time/DateTime.html#withTimeAtStartOfDay--
   DateTime withTimeAtStartOfDay() => DateTime.atStartOfDay(this, timeZone);
+
+  @override
+  core.DateTime toCoreFields() => local.toCoreFields();
 
   @override
   DateTime nextWeekday(int weekday) =>

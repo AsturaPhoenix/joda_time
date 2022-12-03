@@ -28,3 +28,7 @@ class Time extends Equatable {
       (LocalDateTime(Date.zero, this) + delta).time;
   Time operator -(Period delta) => this + -delta;
 }
+
+extension TimeExtensions on Time {
+  int get hour12 => (hour - 1) % 12 + 1;
+}
