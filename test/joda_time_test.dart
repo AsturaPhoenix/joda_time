@@ -42,7 +42,9 @@ void main() {
         });
 
         test('throws on the boundary', () {
-          expect(() => DateTime.resolve(springForward, tz),
+          expect(
+              () => DateTime.resolve(springForward, tz,
+                  resolver: Resolvers.strict),
               throwsA(isA<DstError>()));
         });
 
@@ -81,7 +83,9 @@ void main() {
         });
 
         test('throws on the boundary', () {
-          expect(() => DateTime.resolve(fallBack - change, tz),
+          expect(
+              () => DateTime.resolve(fallBack - change, tz,
+                  resolver: Resolvers.strict),
               throwsA(isA<DstError>()));
         });
 

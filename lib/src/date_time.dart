@@ -22,7 +22,7 @@ class DateTime extends Instant implements LocalDateTime {
       : this(Instant.fromMillisecondsSinceEpoch(t), timeZone);
   DateTime.now(TimeZone timeZone) : this(Instant.now(), timeZone);
   factory DateTime.resolve(LocalDateTime localDateTime, TimeZone timeZone,
-          {ResolverFunction resolver = Resolvers.strict,
+          {ResolverFunction resolver = Resolvers.forEarlierOffset,
           ResolverFunction? springForward,
           ResolverFunction? fallBack}) =>
       Resolver._(localDateTime, timeZone).resolve(
@@ -75,9 +75,7 @@ class DateTime extends Instant implements LocalDateTime {
 
   bool get isDst => timeZoneOffset.isDst;
 
-  /// Variation of [operator +] that accepts resolver overrides. As the operator
-  /// defaults to [Resolvers.forEarlierOffset], that is the default here as
-  /// well.
+  /// Variation of [operator +] that accepts resolver overrides.
   DateTime add(Period period,
           {ResolverFunction resolver = Resolvers.forEarlierOffset,
           ResolverFunction? springForward,
@@ -104,16 +102,10 @@ class DateTime extends Instant implements LocalDateTime {
   @override
   DateTime operator -(dynamic delta) => this + -delta;
 
-  DateTime withTime(Time time,
-          {ResolverFunction resolver = Resolvers.strict,
-          ResolverFunction? springForward,
-          ResolverFunction? fallBack}) =>
-      DateTime.resolve(date & time, timeZone,
-          resolver: resolver, springForward: springForward, fallBack: fallBack);
+  DateTime withDate(Date date) => DateTime.resolve(date & time, timeZone);
 
   @override
-  DateTime operator &(Time time) =>
-      withTime(time, resolver: Resolvers.forEarlierOffset);
+  DateTime operator &(Time time) => DateTime.resolve(date & time, timeZone);
 
   /// Returns a copy of this [DateTime] with the time set to the start of the
   /// day.
