@@ -7,6 +7,22 @@ void main() {
 
   final defaultTimeZone = TimeZone.forId('America/Los_Angeles');
 
+  group('conversion', () {
+    test('Period from Duration', () {
+      expect(
+          Period.fromStandardDuration(
+              const Duration(days: 3, hours: 2, minutes: 1)),
+          equals(const Period(days: 3, hours: 2, minutes: 1)));
+    });
+
+    test('Period from negative Duration', () {
+      expect(
+          Period.fromStandardDuration(
+              const Duration(days: -3, hours: -2, minutes: -1)),
+          equals(const Period(days: -3, hours: -2, minutes: -1)));
+    });
+  });
+
   group('operators', () {
     test('DateTime', () {
       final leapFeb =
@@ -22,6 +38,30 @@ void main() {
               DateTime.atStartOfDay(const Date(2000, 3, 1), defaultTimeZone)));
 
       expect(leapFeb < leapFeb + const Duration(milliseconds: 1), isTrue);
+    });
+
+    group('Period', () {
+      test('difference involving February', () {
+        expect(
+            Period.difference(const Date(2022, 3, 4), const Date(2022, 2, 26)),
+            equals(const Period(days: 6)));
+      });
+
+      test('difference across fall back', () {
+        final fallBack = DateTime.resolve(
+            const Date(2022, 11, 6) & const Time(1, 0), defaultTimeZone);
+        expect(Period.difference(fallBack + const Duration(hours: 1), fallBack),
+            const Period());
+      });
+
+      test('difference across spring forward', () {
+        final springForward = DateTime.resolve(
+            const Date(2022, 3, 13) & const Time(1, 0), defaultTimeZone);
+        expect(
+            Period.difference(
+                springForward + const Duration(hours: 1), springForward),
+            const Period(hours: 2));
+      });
     });
   });
 
