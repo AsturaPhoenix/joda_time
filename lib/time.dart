@@ -6,6 +6,7 @@
 /// like extensions and interfaces, and seems too heavy to fork.
 library joda;
 
+export 'src/comparison.dart';
 export 'src/date.dart';
 export 'src/date_time.dart';
 export 'src/instant.dart';
