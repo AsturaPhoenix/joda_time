@@ -24,4 +24,6 @@ class Instant extends Equatable implements Comparable<Instant> {
 
   Instant operator +(Duration delta) => Instant(value.add(delta));
   Instant operator -(Duration delta) => this + -delta;
+
+  Duration difference(Instant other) => value.difference(other.value);
 }
